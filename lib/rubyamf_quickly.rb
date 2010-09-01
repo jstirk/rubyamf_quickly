@@ -36,9 +36,14 @@ module RubyAMF
       
       # Convert any unhandled exception to an AMF FaultObject so it triggers a FaultEvent
       def amf_exception_handler(ex)
-        RAILS_DEFAULT_LOGGER.error ex.message
-        RAILS_DEFAULT_LOGGER.error ex.backtrace.join( "\n" )
-        render :amf => FaultObject.new(ex.to_s) if is_amf
+        if is_amf then
+          RAILS_DEFAULT_LOGGER.error ex.message
+          RAILS_DEFAULT_LOGGER.error ex.backtrace.join( "\n" )
+          render :amf => FaultObject.new(ex.to_s) if is_amf
+        else
+          # Let the default handler render it if we aren't in AMF
+          rescue_action_without_handler(ex)
+        end
       end
     end
   end
