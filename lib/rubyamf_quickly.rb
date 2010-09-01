@@ -39,7 +39,7 @@ module RubyAMF
         if is_amf then
           RAILS_DEFAULT_LOGGER.error ex.message
           RAILS_DEFAULT_LOGGER.error ex.backtrace.join( "\n" )
-          render :amf => FaultObject.new(ex.to_s) if is_amf
+          render :amf => FaultObject.new(ex.to_s)
         else
           # Let the default handler render it if we aren't in AMF
           rescue_action_without_handler(ex)
